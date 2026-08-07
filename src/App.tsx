@@ -67,7 +67,7 @@ export default function App() {
         )}
         {showAuth && !isOwnerAuthenticated && (
           <div className="mt-4 max-w-sm mx-auto">
-            <OwnerAuth onAuthSuccess={() => setIsOwnerAuthenticated(true)} />
+            <OwnerAuth onAuthSuccess={() => setIsOwnerAuthenticated(true)} onClose={() => setShowAuth(false)} />
           </div>
         )}
       </footer>

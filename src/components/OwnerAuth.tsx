@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react';
 
-export function OwnerAuth({ onAuthSuccess }: { onAuthSuccess: () => void }) {
+export function OwnerAuth({ onAuthSuccess, onClose }: { onAuthSuccess: () => void, onClose: () => void }) {
   const [code, setCode] = useState('');
   const [error, setError] = useState(false);
 
@@ -8,14 +8,22 @@ export function OwnerAuth({ onAuthSuccess }: { onAuthSuccess: () => void }) {
     e.preventDefault();
     if (code === 'fit@12gym$') {
       onAuthSuccess();
+      onClose();
     } else {
       setError(true);
       setCode('');
+      // Keep it open to show error, or close it? User said "if enter wrong then again hide it"
+      // I'll close it after 2 seconds on error so they can try again if they want, but it hides the disturbing UI.
+      setTimeout(() => {
+        setError(false);
+        onClose();
+      }, 2000);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 bg-white/5 border border-white/10 rounded-3xl">
+    <form onSubmit={handleSubmit} className="p-6 bg-white/5 border border-white/10 rounded-3xl relative">
+      <button type="button" onClick={onClose} className="absolute top-2 right-2 text-slate-500 hover:text-white">✕</button>
       <h3 className="text-lg font-bold mb-4 uppercase tracking-widest">Owner Access</h3>
       <input
         type="password"
